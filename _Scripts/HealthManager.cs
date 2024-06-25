@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // Add this namespace
 
 public class HealthManager : MonoBehaviour
 {
@@ -31,10 +32,21 @@ public class HealthManager : MonoBehaviour
             currentHealth = 0;
         }
         UpdateHealthBar();
+
+        if (currentHealth == 0)
+        {
+            LoadGameOverScene(); // Load the game over scene
+        }
     }
 
     void UpdateHealthBar()
     {
         healthBarSlider.value = currentHealth;
     }
+
+    void LoadGameOverScene()
+    {
+        SceneManager.LoadScene("Died");
+    }
 }
+
