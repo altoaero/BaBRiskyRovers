@@ -9,15 +9,33 @@ public class RockGenerator : MonoBehaviour
     public float areaWidth = 50f; // Width of the area where rocks can be placed
     public float areaHeight = 50f; // Height of the area where rocks can be placed
     public float minDistanceBetweenRocks = 2f; // Minimum distance between rocks
+    private Vector2 spaceBaseLocation = new Vector2(-0.172f, 0.379f);
+    private List<Vector2> rockPositions = new List<Vector2>();
 
     void Start()
     {
-        GenerateRocks();
+        //GenerateRocks();
     }
+
+    public void changeNumRocks(int n) // used in the Terrain difficulty scene. 
+    {
+        numberOfRocks = n;
+        PlayerPrefs.SetInt("numberOfRocks", numberOfRocks); // sets the number of rocks that will generate in . 
+    }
+
+    /*public void AddLocation(Vector2 loc){
+        rockPositions.Add(loc);
+    }
+
+    public List<Vector2> GetRockPositions(){
+        return rockPositions;
+    }*/
 
     void GenerateRocks()
     {
-        List<Vector2> rockPositions = new List<Vector2>();
+
+        //List<Vector2> rockPositions = new List<Vector2>();
+        rockPositions.Add(spaceBaseLocation);
 
         for (int i = 0; i < numberOfRocks; i++)
         {
@@ -43,7 +61,8 @@ public class RockGenerator : MonoBehaviour
             } while (!validPosition);
 
             rockPositions.Add(newPosition);
-            Instantiate(rockPrefabs[Random.Range(0, rockPrefabs.Length)], newPosition, Quaternion.identity);
+            Instantiate(rockPrefabs[Random.Range(0, rockPrefabs.Length)], newPosition, Quaternion.identity); // selects a random index from the rockprefabs and generates. 
         }
     }
 }
+

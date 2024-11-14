@@ -3,11 +3,22 @@ using UnityEngine;
 public class Rock12ClickHandler : MonoBehaviour
 {
     public GameObject popupPanel; // Reference to the popup panel
+    public Transform roverTransform; // Reference to the rover's transform
+    public float proximityDistance = 1f; // Distance within which the popup will stay open
+
     private bool isPopupOpen = false;
 
     void Start()
     {
         ClosePopup();
+    }
+
+    void Update()
+    {
+        if (isPopupOpen && !IsRoverInProximity())
+        {
+            ClosePopup();
+        }
     }
 
     void OnMouseDown()
@@ -33,5 +44,10 @@ public class Rock12ClickHandler : MonoBehaviour
     {
         popupPanel.SetActive(false);
         isPopupOpen = false;
+    }
+
+    bool IsRoverInProximity()
+    {
+        return Vector3.Distance(transform.position, roverTransform.position) <= proximityDistance;
     }
 }

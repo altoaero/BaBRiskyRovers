@@ -2,48 +2,57 @@ using UnityEngine;
 
 public class RoverController : MonoBehaviour
 {
-public float speed = 5f; // Speed of the rover
-private Sprite leftFacingSprite; // Reference to the sprite for the rover facing left
-private Sprite rightFacingSprite; // Reference to the sprite for the rover facing right
+    public float speed = 5f; // Speed of the rover
+    private Sprite leftFacingSprite; // Reference to the sprite for the rover facing left
+    private Sprite rightFacingSprite; // Reference to the sprite for the rover facing right
 
-private SpriteRenderer spriteRenderer; // Reference to the SpriteRenderer component
+    private SpriteRenderer spriteRenderer; // Reference to the SpriteRenderer component
+    public AudioClip crashSound; // Add this line
+    private AudioSource audioSource; // Add this line
 
-void Start()
-{
-spriteRenderer = GetComponent<SpriteRenderer>();
-// Get the SpriteRenderer component
-//spriteRenderer = GetComponent<SpriteRenderer>();
+    void Start()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>(); // Add this line
+    }
 
-// Set the initial sprite to facing right
-//spriteRenderer.sprite = rightFacingSprite;
-}
-public void changeLeft( Sprite left ) {
-leftFacingSprite = left;
-}
-public void changeRight( Sprite right) {
-rightFacingSprite = right;
-}
-void Update()
-{
-float moveHorizontal = Input.GetAxis("Horizontal");
-float moveVertical = Input.GetAxis("Vertical");
+    public void ChangeLeft(Sprite left)
+    {
+        leftFacingSprite = left;
+    }
 
-Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
-transform.position += movement * speed * Time.deltaTime;
+    public void ChangeRight(Sprite right)
+    {
+        rightFacingSprite = right;
+    }
 
-// Check for horizontal input and change the sprite accordingly
-if (moveHorizontal < 0)
-{
-//transform.eulerAngles = new Vector3(0, 180, 0);
-//spriteRenderer.sprite = leftFacingSprite;
-spriteRenderer.flipX = false;
-}
-else if (moveHorizontal > 0)
-{
-//transform.eulerAngles = new Vector3(0, 0, 0); // Normal
-//spriteRenderer.sprite = rightFacingSprite;
-spriteRenderer.flipX = true;
+    void Update()
+    {
+        float moveHorizontal = Input.GetAxis("Horizontal");
+        float moveVertical = Input.GetAxis("Vertical");
 
-}
-}
+        Vector3 movement = new Vector3(moveHorizontal, moveVertical, 0);
+        transform.position += movement * speed * Time.deltaTime;
+
+        // Check for horizontal input and change the sprite accordingly
+        if (moveHorizontal < 0)
+        {
+            spriteRenderer.flipX = false;
+        }
+        else if (moveHorizontal > 0)
+        {
+            spriteRenderer.flipX = true;
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision) // Change to OnCollisionEnter2D for 2D collisions
+    {
+        if (collision.gameObject.tag == "Rock")
+        {
+            // Play crash sound
+            audioSource.PlayOneShot(crashSound);
+            Debug.Log("Rover collided with rock.");
+            // Implement health reduction logic here if needed
+        }
+    }
 }
