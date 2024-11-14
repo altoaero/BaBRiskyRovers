@@ -14,7 +14,7 @@ public class RockGenerator : MonoBehaviour
 
     void Start()
     {
-        GenerateRocks();
+        //GenerateRocks();
     }
 
     public void changeNumRocks(int n) // used in the Terrain difficulty scene. 

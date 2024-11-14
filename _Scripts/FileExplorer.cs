@@ -1,8 +1,10 @@
-using System.Collections; 
-using System.Collections.Generic; 
-using UnityEngine; 
-using UnityEngine.UI; 
-using UnityEditor; 
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class FileExplorer : MonoBehaviour
 {
@@ -17,11 +19,13 @@ public class FileExplorer : MonoBehaviour
         // Set the base path for the movement files
         string basePath = "C:\\Commands\\movement-files";
 
-        // Open a file panel to select a movement file
+#if UNITY_EDITOR
+        // Open a file panel to select a movement file (only in the editor)
         path = EditorUtility.OpenFilePanel("", "Commands", "movement-files");
+#endif
 
         // Check if a file was selected
-        if (path.Length != 0)
+        if (!string.IsNullOrEmpty(path))
         {
             // Calculate the start index for extracting the file name
             int startIndex = basePath.Length + 1;
@@ -49,7 +53,7 @@ public class FileExplorer : MonoBehaviour
         }
         else
         {
-            Debug.Log("no name"); // Log a message if no file was selected
+            Debug.Log("No file selected"); // Log a message if no file was selected
         }
     }
 }

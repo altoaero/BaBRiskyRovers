@@ -71,7 +71,7 @@ public class HealthManager : MonoBehaviour
         launchSecondRoverButton.gameObject.SetActive(true); // Show the Launch Second Rover Button
     }
 
-    void OnLaunchSecondRover()
+    void OnLaunchSecondRover() 
     {
         // Calculate the offset position for the grave
         Vector3 gravePosition = roverTransform.position + new Vector3(1.0f, 0, 0); // Adjust the offset as needed
