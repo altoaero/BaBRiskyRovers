@@ -3747,7 +3747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ad448416cad44aa7390fb6fa5892b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 100
+  currentHealth: 0
   healthBarSlider: {fileID: 389567571}
   gameOverPanel: {fileID: 1377955039}
   launchSecondRoverButton: {fileID: 971503379}
@@ -8457,6 +8458,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeLimit: 300
   logInterval: 5
+  healthManager: {fileID: 389567572}
+  decayingParts: {fileID: 0}
 --- !u!4 &971327107
 Transform:
   m_ObjectHideFlags: 0
@@ -19603,7 +19606,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c5ad448416cad44aa7390fb6fa5892b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 100
+  currentHealth: 0
   healthBarSlider: {fileID: 389567571}
   gameOverPanel: {fileID: 1377955039}
   launchSecondRoverButton: {fileID: 971503379}
