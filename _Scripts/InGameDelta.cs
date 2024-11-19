@@ -62,10 +62,10 @@ public class GameTimer : MonoBehaviour
         }
 
         // If the timer exceeds the time limit, trigger some event (e.g., Game Over, level complete)
-        if (timeElapsed >= timeLimit)
-        {
-            OnTimeUp();
-        }
+      //  if (timeElapsed >= timeLimit)
+       // {
+       //     OnTimeUp();
+       // }
 
         // If health reaches zero, stop the timer
         if (healthManager != null && healthManager.currentHealth <= 0)
@@ -87,11 +87,10 @@ public class GameTimer : MonoBehaviour
         // Implement what happens when the timer hits the time limit (e.g., trigger game over or end the level)
         Debug.Log("Time's up!");
 
-        // Add logic for game over or restart, if needed
-        // Example: GameManager.Instance.GameOver();
+   
     }
 
-    // Optionally, you can get the elapsed time in seconds (for other uses)
+ 
     public float GetElapsedTime()
     {
         return timeElapsed;

@@ -68,7 +68,7 @@ public class HealthManager : MonoBehaviour
             // Log after taking damage to ensure currentHealth is changing
           
             UpdateHealthBar();
-
+            //Send to decay script 
             // If health reaches 0, trigger Game Over
             if (currentHealth == 0)
             {
@@ -106,7 +106,7 @@ public class HealthManager : MonoBehaviour
 
     public void ReceiveTimeUpdate()
     {
-        TakeDamage(5);  // Decrease health by 5 every 5 seconds (or whatever the interval is)
+        //TakeDamage(5);  // Decrease health by 5 every 5 seconds (or whatever the interval is)
     }
 }
 
