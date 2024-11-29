@@ -3754,6 +3754,7 @@ MonoBehaviour:
   launchSecondRoverButton: {fileID: 971503379}
   gravePrefab: {fileID: 1586829903}
   roverTransform: {fileID: 2081609967}
+  decayingParts: {fileID: 0}
 --- !u!1 &392384026
 GameObject:
   m_ObjectHideFlags: 0
@@ -16996,6 +16997,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0681fc743036282439ec7746ced11be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  battery_amount: 3
+  cpu_amount: 3
+  wheel_amount: 6
+  solarp_amount: 3
 --- !u!4 &1776073066
 Transform:
   m_ObjectHideFlags: 0
@@ -19613,6 +19618,7 @@ MonoBehaviour:
   launchSecondRoverButton: {fileID: 971503379}
   gravePrefab: {fileID: 1586829903}
   roverTransform: {fileID: 2081609967}
+  decayingParts: {fileID: 0}
 --- !u!114 &2081609972
 MonoBehaviour:
   m_ObjectHideFlags: 0

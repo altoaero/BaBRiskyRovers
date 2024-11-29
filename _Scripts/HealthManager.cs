@@ -10,8 +10,9 @@ public class HealthManager : MonoBehaviour
     public Button launchSecondRoverButton; // Reference to the Launch Second Rover Button
     public GameObject gravePrefab; // Reference to the Grave Prefab
     public Transform roverTransform; // Reference to the Rover's Transform
-
+    public DecayingParts decayingParts; // Reference to DecayingParts
     private bool isGameOver = false;
+    private int chasis;
 
     void Awake()
     {
@@ -30,9 +31,9 @@ public class HealthManager : MonoBehaviour
 
     void Start()
     {
-    
-        
 
+
+        decayingParts = FindObjectOfType<DecayingParts>();
         // Hide the Game Over Panel at the start
         gameOverPanel.SetActive(false);
 
@@ -58,7 +59,11 @@ public class HealthManager : MonoBehaviour
         if (!isGameOver)
         {
             currentHealth -= damage;
-
+            chasis = decayingParts.DamageTaken(currentHealth);
+            if (chasis == 1)
+            {
+                currentHealth = 0;
+            }
             // Prevent health from going below zero
             if (currentHealth < 0)
             {
@@ -106,7 +111,7 @@ public class HealthManager : MonoBehaviour
 
     public void ReceiveTimeUpdate()
     {
-        //TakeDamage(5);  // Decrease health by 5 every 5 seconds (or whatever the interval is)
+        TakeDamage(1);  // Decrease health by 5 every 5 seconds (or whatever the interval is)
     }
 }
 
