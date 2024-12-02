@@ -34,7 +34,7 @@ public class DecayingParts : MonoBehaviour
     public int cpu_amount = 3;
     public int wheel_amount = 6;
     public int solarp_amount = 3;
-
+    private int wheel_loss_value = 0;
     //the lambdas here can be used for longer sessions failes at 2.3 hours
     private double wheel_lambda_adj = 1 - Math.Pow(1 - 2e-05, 1/60);
     private double cpu_lambda_adj = 1 - Math.Pow(1 - 2.5e-06, 1 / 60);
@@ -103,10 +103,16 @@ public class DecayingParts : MonoBehaviour
     public void ProbabilitySpinner(float time_passed)
     {
         // Use the class-level Decay_rate for the calculation
+        if (wheel_amount >= 2)
+        {
+            Random wheel_loss_gen = new Random();
+            wheel_loss_value = wheel_loss_gen.Next(1, wheel_amount);
+        }
+
         time_track += time_passed;
         //battery_fail_rate += Decay_rate * Math.Exp(-Decay_rate * time_passed);
         battery_fail_rate += 1 - Math.Exp(-Decay_lambda_battery * time_passed);
-        wheel_fail_rate += 1 - Math.Exp(-Decay_lambda_wheel * time_passed);
+        wheel_fail_rate += (1 - Math.Exp(-Decay_lambda_wheel * time_passed) * wheel_amount);
         cpu_fail_rate += 1 - Math.Exp(-Decay_lambda_cpu * time_passed);
         solarpanel_fail_rate += 1 - Math.Exp(-Decay_lambda_solar_panel * time_passed);
         circut_fail_rate += 1 - Math.Exp(-Decay_lambda_circuts * time_passed);
@@ -123,12 +129,15 @@ public class DecayingParts : MonoBehaviour
         percent_chasis = 100 * overall_chasis_rate;
         Debug.Log("overall fail percentage " + overall_chasis_rate);
         Random rnd = new Random();
+        
+       
         int randomNumber = rnd.Next(0, 100);
         if (randomNumber <= percent_battery)
         {
             if (battery_amount < 1)
             {
                 Debug.Log("Out of batteries");
+                battery_amount = 0;
             }
             else{
                 battery_amount -= 1;
@@ -138,27 +147,31 @@ public class DecayingParts : MonoBehaviour
         }
         if (randomNumber <= percent_wheel)
         {
+            wheel_amount -= wheel_loss_value;
             if (wheel_amount < 1)
             {
                 Debug.Log("Can't move anymore");
+                wheel_amount = 0;
             }
             else
             {
                 wheel_amount -= 1;
                 Debug.Log("reaming amount of wheels " + wheel_amount);
-                wheel_fail_rate = 0;
+                wheel_fail_rate = 0; 
+
             }
         }
         if (randomNumber <= percent_cpu)
         {
             if (cpu_amount < 1)
             {
-                Debug.Log("Out of batteries");
+                Debug.Log("Out of cpus");
+                cpu_amount = 0;
             }
             else
             {
                 cpu_amount -= 1;
-                Debug.Log("reaming amount of batteries " + cpu_amount);
+                Debug.Log("reaming amount of cpus " + cpu_amount);
                 cpu_fail_rate = 0;
             }
         }
@@ -167,6 +180,7 @@ public class DecayingParts : MonoBehaviour
             if (solarp_amount < 1)
             {
                 Debug.Log("can't recharge");
+                solarp_amount = 0;
             }
             else
             {
