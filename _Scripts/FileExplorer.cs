@@ -1,7 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -13,47 +15,70 @@ public class FileExplorer : MonoBehaviour
 
     public void OpenExplorer()
     {
-        // Find the rover GameObject in the scene
+        // rover testing
         rover = GameObject.Find("Rover");
+        if (rover == null)
+        {
+            Debug.LogError("? Rover GameObject not found in the scene!");
+            return;
+        }
+        Debug.Log($"? Rover found: {rover.name}");
 
-        // Set the base path for the movement files
-        string basePath = "C:\\Commands\\movement-files";
-
+        //  fileselecting
 #if UNITY_EDITOR
-        // Open a file panel to select a movement file (only in the editor)
-        path = EditorUtility.OpenFilePanel("", "Commands", "movement-files");
+        Debug.Log("??? Opening file explorer (Editor-only)...");
+        path = EditorUtility.OpenFilePanel("Select Movement File", "", "txt");
+#else
+    Debug.LogWarning("?? File Explorer only works in Unity Editor");
+    return;
 #endif
 
-        // Check if a file was selected
-        if (!string.IsNullOrEmpty(path))
+        // file path validation
+        if (string.IsNullOrEmpty(path))
         {
-            // Calculate the start index for extracting the file name
-            int startIndex = basePath.Length + 1;
+            Debug.LogWarning("?? No file selected!");
+            return;
+        }
+        Debug.Log($"?? Selected file: {path}");
 
-            // Extract the file name from the full path
-            string modifiedString = path.Substring(startIndex);
+        // taking the file path
+        string fileName = Path.GetFileName(path);
+        if (string.IsNullOrEmpty(fileName))
+        {
+            Debug.LogError("? Failed to extract filename!");
+            return;
+        }
+        Debug.Log($"?? Processing file: {fileName}");
 
-            // Move the rover based on the selected file
-            if (modifiedString == "East-10.txt")
+        // moving by float values slowly.
+        try
+        {
+            switch (fileName.ToLower())
             {
-                rover.transform.Translate(1f, 0, 0); // Move rover East
-            }
-            else if (modifiedString == "West-10.txt")
-            {
-                rover.transform.Translate(-1f, 0, 0); // Move rover West
-            }
-            else if (modifiedString == "South-10.txt")
-            {
-                rover.transform.Translate(0, -1f, 0); // Move rover South
-            }
-            else if (modifiedString == "North-10.txt")
-            {
-                rover.transform.Translate(0, 1f, 0); // Move rover North
+                case "forward-10.txt":
+                    Debug.Log("?? Moving FORWARD (+X) by 0.1 unit");
+                    rover.transform.Translate(0.1f, 0, 0);
+                    break;
+                case "backward-10.txt":
+                    Debug.Log("?? Moving BACKWARD (-X) by  0.1 unit");
+                    rover.transform.Translate(-0.1f, 0, 0);
+                    break;
+                case "downward-10.txt":
+                    Debug.Log("?? Moving DOWNWARD (-Y) by  0.1 unit");
+                    rover.transform.Translate(0, -0.1f, 0);
+                    break;
+                case "upward-10.txt":
+                    Debug.Log("?? Moving UPWARD (+Y) by  0.1 unit");
+                    rover.transform.Translate(0, 0.1f, 0);
+                    break;
+                default:
+                    Debug.LogError($"? Unknown movement file: {fileName}");
+                    break;
             }
         }
-        else
+        catch (System.Exception e)
         {
-            Debug.Log("No file selected"); // Log a message if no file was selected
+            Debug.LogError($"?? Movement error: {e.Message}");
         }
     }
 }

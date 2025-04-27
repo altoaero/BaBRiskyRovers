@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RoverController : MonoBehaviour
 {
+    public int playermovement = 0; 
     public float speed = 5f; // Speed of the rover
     private Sprite leftFacingSprite; // Reference to the sprite for the rover facing left
     private Sprite rightFacingSprite; // Reference to the sprite for the rover facing right

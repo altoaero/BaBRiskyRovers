@@ -51,7 +51,7 @@ public class DecayingParts : MonoBehaviour
     /// </summary>
     // 1-(1-lamda)^(1/60)
     public MultiImageSwitcher multiImageSwitcher;
-
+    public WheelManager wheelmanager;
     void Start()
     {
         double F_Percent = 0.05;
@@ -61,7 +61,6 @@ public class DecayingParts : MonoBehaviour
       //  double decay_rate_example = 1 - Math.Exp(example * 0);
   
 
-        
         
         //f is difficulity 
         // Calculate decay rate and update the class-level Decay_rate
@@ -119,13 +118,27 @@ public class DecayingParts : MonoBehaviour
             Debug.LogError("MultiImageSwitcher is not assigned!");
         }
     }
+    public void CallSwitchWheelAtIndex(int index)
+    {
+        if (wheelmanager != null )
+        {
+            wheelmanager.SwitchWheelAtIndex(index);
+        }
+        else
+        {
+            Debug.LogError("Switchwheel is not assigned!");
+        }
+    }
     public void ProbabilitySpinner(float time_passed)
     {
        
     
 
         time_track += time_passed;
-        //battery_fail_rate += Decay_rate * Math.Exp(-Decay_rate * time_passed);
+
+        //Failure rate is gennerally calulated is 1 - e^(lambda for specfic part*delta time)
+
+
         battery_fail_rate += 1 - Math.Exp(-Decay_lambda_battery * time_passed);
         wheel_fail_rate += (1 - Math.Exp(-Decay_lambda_wheel * time_passed) * wheel_amount);
         cpu_fail_rate += 1 - Math.Exp(-Decay_lambda_cpu * time_passed);
@@ -142,7 +155,7 @@ public class DecayingParts : MonoBehaviour
         overall_chasis_rate = battery_fail_rate * wheel_fail_rate * cpu_fail_rate * solarpanel_fail_rate * circut_fail_rate;
         //       double incremented_by = 1 - Math.Exp(-Decay_rate_battery* time_passed);
         percent_chasis = 100 * overall_chasis_rate;
-        Debug.Log("overall fail percentage " + overall_chasis_rate);
+       // Debug.Log("overall fail percentage " + overall_chasis_rate);
         Random rnd = new Random();
        
         int wheel1_gen = rnd.Next(0,100);
@@ -151,75 +164,84 @@ public class DecayingParts : MonoBehaviour
         int wheel4_gen = rnd.Next(0,100);
         int wheel5_gen = rnd.Next(0,100);
         int wheel6_gen = rnd.Next(0,100);
+        //testing values 
         int passing = 1;
+        int wheel_passing = 1;
+        
         // make UI elements for failures
         int randomNumber = rnd.Next(0, 100);
         if (randomNumber <= percent_battery || passing == 0 )
         {
             if (battery_amount < 1)
             {
-                Debug.Log("Out of batteries");
+                //Debug.Log("Out of batteries");
                 battery_amount = 0;
             }
             else{
                 CallSwitchImageAtIndex(battery_amount - 1);
                 battery_amount -= 1;
 
-                Debug.Log("reaming amount of batteries " + battery_amount);
+                //Debug.Log("reaming amount of batteries " + battery_amount);
                 battery_fail_rate = 0;
             }
         }
         
-        if(wheel1 == 0 && wheel1_gen<= percent_wheel)
+        if(wheel1 == 0 && wheel1_gen<= percent_wheel ||wheel_passing  == 1 )
         {
            wheel1 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_1 down");
+          // Debug.Log("Wheel_1 down");
+           CallSwitchWheelAtIndex(0);
         }
         if(wheel2 == 0 && wheel2_gen<= percent_wheel)
         {
            wheel2 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_2 down");
+           //Debug.Log("Wheel_2 down");
+           CallSwitchWheelAtIndex(1);
         }
-        if(wheel3 == 0 && wheel3_gen<= percent_wheel)
+        if(wheel3 == 0 && wheel3_gen<= percent_wheel )
         {
            wheel3 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_3 down");
+           //Debug.Log("Wheel_3 down");
+           CallSwitchWheelAtIndex(2);
         }
         if(wheel4 == 0 && wheel4_gen<= percent_wheel)
         {
            wheel4 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_4 down");
+           //Debug.Log("Wheel_4 down");
+           CallSwitchWheelAtIndex(3);
         }
         if(wheel5 == 0 && wheel5_gen<= percent_wheel)
         {
            wheel5 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_5 down");
+           //Debug.Log("Wheel_5 down");
+           CallSwitchWheelAtIndex(4);
         }
         if(wheel6 == 0 && wheel6_gen<= percent_wheel)
         {
            wheel6 = 1;
            wheel_amount -=1;
-           Debug.Log("Wheel_6 down");
+          // Debug.Log("Wheel_6 down");
+           CallSwitchWheelAtIndex(5);
         }
         if(wheel_amount <= 0){
-            Debug.Log("Can't move any more");
+        //    Debug.Log("Can't move any more");
         }
         if (randomNumber <= percent_cpu || passing == 0)
         {
             if (cpu_amount < 1)
             {
-                Debug.Log("Out of cpus");
+                //Debug.Log("Out of cpus");
                 cpu_amount = 0;
             }
             else
             {
                 cpu_amount -= 1;
-                Debug.Log("reaming amount of cpus " + cpu_amount);
+                //Debug.Log("reaming amount of cpus " + cpu_amount);
                 cpu_fail_rate = 0;
             }
         }
@@ -227,32 +249,32 @@ public class DecayingParts : MonoBehaviour
         {
             if (solarp_amount < 1)
             {
-                Debug.Log("can't recharge");
+               // Debug.Log("can't recharge");
                 solarp_amount = 0;
             }
             else
             {
                 solarp_amount -= 1;
-                Debug.Log("Panel remaining " + solarp_amount);
+               // Debug.Log("Panel remaining " + solarp_amount);
                 solarpanel_fail_rate = 0;
             }
         }
 
         if (randomNumber >= percent_circuits || passing == 0)
         {
-            Debug.Log("circuits lives at " + percent_circuits + "%" + "  " + randomNumber);
+        //    Debug.Log("circuits lives at " + percent_circuits + "%" + "  " + randomNumber);
         }
         else
         {
-            Debug.Log("Circuits dies at " + percent_circuits + "%" + "  " + randomNumber);
+            //Debug.Log("Circuits dies at " + percent_circuits + "%" + "  " + randomNumber);
         }
         if (randomNumber >= percent_chasis)
         {
-            Debug.Log("Chasis lives at " + percent_chasis + "%" + "  " + randomNumber);
+            //Debug.Log("Chasis lives at " + percent_chasis + "%" + "  " + randomNumber);
         }
         else
         {
-            Debug.Log("Chasis dies at " + percent_chasis + "%" + "  " + randomNumber);
+           // Debug.Log("Chasis dies at " + percent_chasis + "%" + "  " + randomNumber);
         }
             // Log the failure rate
            

@@ -8,7 +8,7 @@ public class MovementsManager : MonoBehaviour
     public Button myButton; // Reference to the Button
     public RetrieveDataLogs retrieveDataLogs;
 
-    
+
     // Start is called before the first frame update
     void Start()
     {
